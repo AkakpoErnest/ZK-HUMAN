@@ -20,61 +20,6 @@ zkHuman is a cryptographic protocol that verifies human behavior through Zero Kn
 - **UI Components**: Lucide React icons
 - **Build Tool**: Vite for fast development
 
-## 🎯 ZK Application Ideas & Concepts
-
-This project demonstrates just one application of Zero Knowledge Proofs. Here are more ideas for ZK-powered applications:
-
-### 🏛️ Governance & Voting
-- **Anonymous Voting Systems**: Prove eligibility without revealing identity
-- **Quadratic Voting**: Verify token holdings without exposing amounts
-- **Reputation-Based Governance**: Prove community standing without doxxing
-- **Sybil-Resistant DAOs**: Prevent multiple accounts while maintaining privacy
-
-### 💰 DeFi & Finance
-- **Private Credit Scoring**: Prove creditworthiness without financial history exposure
-- **Anonymous KYC**: Comply with regulations while protecting user privacy
-- **Private Portfolio Verification**: Prove asset ownership without revealing holdings
-- **Confidential Trading**: Execute trades without front-running risks
-- **Private Insurance Claims**: Verify eligibility without exposing personal details
-
-### 🎮 Gaming & Social
-- **Skill-Based Matchmaking**: Prove gaming ability without revealing play history
-- **Anonymous Achievements**: Verify accomplishments while maintaining pseudonymity
-- **Private Social Scoring**: Prove reputation without exposing social graph
-- **Confidential Leaderboards**: Compete privately with verifiable rankings
-
-### 🔒 Identity & Authentication
-- **Age Verification**: Prove age requirements without revealing birth date
-- **Location Proofs**: Verify geographic presence without GPS tracking
-- **Educational Credentials**: Prove qualifications without transcript exposure
-- **Professional Licensing**: Verify certifications while maintaining privacy
-- **Biometric Authentication**: Secure login without storing biometric data
-
-### 🌐 Web3 & Blockchain
-- **Private Airdrops**: Distribute tokens based on hidden criteria
-- **Anonymous Whistleblowing**: Prove insider status without identity exposure
-- **Confidential Auctions**: Bid privately with verifiable commitments
-- **Private Membership Proofs**: Access exclusive communities anonymously
-- **Selective Disclosure**: Share specific data points without full profile exposure
-
-### 🏥 Healthcare & Research
-- **Medical Privacy**: Prove health conditions without revealing medical records
-- **Anonymous Clinical Trials**: Participate in research while protecting identity
-- **Genetic Privacy**: Prove hereditary traits without DNA exposure
-- **Mental Health Verification**: Access services without stigma or records
-
-### 🎓 Education & Certification
-- **Anonymous Peer Review**: Verify reviewer qualifications without bias
-- **Private Academic Records**: Prove GPA ranges without exact scores
-- **Skill Verification**: Demonstrate competencies without revealing learning path
-- **Anonymous Surveys**: Collect research data with verified demographics
-
-### 🏢 Enterprise & Compliance
-- **Supply Chain Privacy**: Verify ethical sourcing without revealing suppliers
-- **Anonymous Auditing**: Prove compliance without exposing internal processes
-- **Confidential HR**: Verify employment history without salary disclosure
-- **Private Market Research**: Collect consumer data with demographic proofs
-
 ## 🔧 Development Setup
 
 ```bash
@@ -109,6 +54,68 @@ The system uses several cryptographic primitives:
 - **Entropy Collection**: Mouse movements and timing analysis
 - **Challenge-Response**: Interactive proofs of cognitive ability
 - **Behavioral Biometrics**: Pattern analysis without storage
+
+## 📚 Integration Guide
+
+### React Integration
+
+```jsx
+import { ZKHumanVerify } from '@zkhuman/react';
+
+function LoginForm() {
+  const handleVerification = (proof) => {
+    if (proof.verified) {
+      console.log('Human verified:', proof);
+    }
+  };
+
+  return (
+    <ZKHumanVerify
+      apiKey="your-api-key"
+      onComplete={handleVerification}
+      theme="dark"
+    />
+  );
+}
+```
+
+### Vanilla JavaScript
+
+```html
+<script src="https://cdn.zkhuman.com/v1/zkhuman.js"></script>
+<div id="zk-human-verify"></div>
+
+<script>
+  ZKHuman.init({
+    element: '#zk-human-verify',
+    apiKey: 'your-api-key',
+    onComplete: function(proof) {
+      if (proof.verified) {
+        console.log('Human verified:', proof);
+      }
+    }
+  });
+</script>
+```
+
+### Server-side Verification
+
+```javascript
+const response = await fetch('https://api.zkhuman.com/v1/verify', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer your-secret-key',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    proof: clientProof.hash,
+    timestamp: clientProof.timestamp
+  })
+});
+
+const result = await response.json();
+// { valid: true, humanScore: 95.2, riskLevel: 'low' }
+```
 
 ## 🚀 Deployment
 
