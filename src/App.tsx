@@ -416,7 +416,23 @@ function App() {
     <div onMouseMove={handleMouseMove}>
       {currentView === "landing" && renderLanding()}
       {currentView === "verification" && (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black flex items-center justify-center p-4">
+        <div className="min-h-screen bg-black relative overflow-hidden flex items-center justify-center p-4">
+          <div className="absolute inset-0 cyber-grid opacity-10"></div>
+          <div className="binary-rain">
+            {Array.from({ length: 30 }).map((_, i) => (
+              <div
+                key={i}
+                className="binary-char"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  animationDelay: `${Math.random() * 15}s`,
+                  animationDuration: `${10 + Math.random() * 8}s`,
+                }}
+              >
+                {Math.random() > 0.5 ? "1" : "0"}
+              </div>
+            ))}
+          </div>
           <VerificationProcess
             onComplete={handleVerificationComplete}
             onMouseMove={(x, y) => behavioralAnalyzer.trackMouseMove(x, y)}
@@ -425,12 +441,29 @@ function App() {
         </div>
       )}
       {currentView === "result" && proof && (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black flex items-center justify-center p-4">
+        <div className="min-h-screen bg-black relative overflow-hidden flex items-center justify-center p-4">
+          <div className="absolute inset-0 cyber-grid opacity-10"></div>
+          <div className="particles">
+            {Array.from({ length: 20 }).map((_, i) => (
+              <div
+                key={i}
+                className="particle"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  animationDelay: `${Math.random() * 15}s`,
+                  animationDuration: `${15 + Math.random() * 8}s`,
+                }}
+              />
+            ))}
+          </div>
           <VerificationResult proof={proof} onReset={handleReset} />
         </div>
       )}
       {currentView === "docs" && (
-        <DocumentationView onBack={() => setCurrentView("landing")} />
+        <div className="min-h-screen bg-black relative overflow-hidden">
+          <div className="absolute inset-0 cyber-grid opacity-5"></div>
+          <DocumentationView onBack={() => setCurrentView("landing")} />
+        </div>
       )}
     </div>
   );
