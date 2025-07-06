@@ -27,6 +27,19 @@ export class BehavioralAnalyzer {
     };
   }
 
+  calculateMouseEntropy(): number {
+    if (this.mouseMovements.length < 2) return 0;
+    
+    let entropy = 0;
+    for (let i = 1; i < this.mouseMovements.length; i++) {
+      const dx = this.mouseMovements[i].x - this.mouseMovements[i-1].x;
+      const dy = this.mouseMovements[i].y - this.mouseMovements[i-1].y;
+      entropy += Math.sqrt(dx * dx + dy * dy);
+    }
+    
+    return entropy;
+  }
+
   calculateHumanScore(): number {
     // Simple scoring algorithm based on behavioral patterns
     let score = 0;
@@ -49,19 +62,6 @@ export class BehavioralAnalyzer {
     }
     
     return Math.min(score, 100);
-  }
-
-  private calculateMouseEntropy(): number {
-    if (this.mouseMovements.length < 2) return 0;
-    
-    let entropy = 0;
-    for (let i = 1; i < this.mouseMovements.length; i++) {
-      const dx = this.mouseMovements[i].x - this.mouseMovements[i-1].x;
-      const dy = this.mouseMovements[i].y - this.mouseMovements[i-1].y;
-      entropy += Math.sqrt(dx * dx + dy * dy);
-    }
-    
-    return entropy;
   }
 
   private calculateTimingVariance(): number {

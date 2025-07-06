@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle, XCircle, Shield, User, Cpu, Zap } from 'lucide-react';
+import { CheckCircle, XCircle, Shield, User, Cpu, Zap, Key, Hash } from 'lucide-react';
 import { ZKPProof } from '../types/zkp';
 
 interface VerificationResultProps {
@@ -36,12 +36,12 @@ const VerificationResult: React.FC<VerificationResultProps> = ({ proof, onReset 
         </div>
         
         <h2 className="text-2xl font-bold mb-2 text-white">
-          {proof.verified ? 'ZK Proof Verified' : 'Verification Failed'}
+          {proof.verified ? 'ZK-SNARK Verified' : 'Verification Failed'}
         </h2>
         
         <p className="text-gray-400 mb-6">
           {proof.verified 
-            ? 'Cryptographic proof of humanity successfully generated' 
+            ? 'Zero-knowledge proof of humanity successfully generated' 
             : 'Unable to generate valid ZK proof. Protocol retry required.'
           }
         </p>
@@ -59,11 +59,37 @@ const VerificationResult: React.FC<VerificationResultProps> = ({ proof, onReset 
         </div>
 
         <div className="flex items-center justify-between p-4 bg-gray-700/30 border border-gray-600/30 rounded-lg">
-          <span className="text-sm font-medium text-gray-300">Proof Hash</span>
+          <span className="text-sm font-medium text-gray-300 flex items-center gap-2">
+            <Hash className="w-4 h-4" />
+            ZK Proof Hash
+          </span>
           <span className="text-xs font-mono text-purple-400">
             {proof.hash.substring(0, 8)}...
           </span>
         </div>
+
+        {proof.zkCommitments && (
+          <div className="p-4 bg-gray-700/30 border border-gray-600/30 rounded-lg">
+            <div className="flex items-center gap-2 mb-3">
+              <Key className="w-4 h-4 text-cyan-400" />
+              <span className="text-sm font-medium text-gray-300">Pedersen Commitments</span>
+            </div>
+            <div className="space-y-2 text-xs">
+              <div className="flex justify-between">
+                <span className="text-gray-400">Pattern:</span>
+                <span className="font-mono text-cyan-400">{proof.zkCommitments.pattern.substring(0, 8)}...</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-400">Timing:</span>
+                <span className="font-mono text-cyan-400">{proof.zkCommitments.timing.substring(0, 8)}...</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-400">Mouse:</span>
+                <span className="font-mono text-cyan-400">{proof.zkCommitments.mouse.substring(0, 8)}...</span>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="flex items-center justify-between p-4 bg-gray-700/30 border border-gray-600/30 rounded-lg">
           <span className="text-sm font-medium text-gray-300">Timestamp</span>
@@ -74,30 +100,30 @@ const VerificationResult: React.FC<VerificationResultProps> = ({ proof, onReset 
       </div>
 
       <div className="mb-6">
-        <h4 className="text-sm font-semibold text-gray-300 mb-3">ZK Privacy Guarantees</h4>
+        <h4 className="text-sm font-semibold text-gray-300 mb-3">ZK-SNARK Properties</h4>
         <div className="grid grid-cols-2 gap-3 text-xs">
           <div className="p-2 bg-green-900/20 border border-green-500/30 rounded">
             <div className="flex items-center gap-1 text-green-400">
               <CheckCircle className="w-3 h-3" />
-              <span>Zero data retention</span>
+              <span>Zero knowledge</span>
             </div>
           </div>
           <div className="p-2 bg-green-900/20 border border-green-500/30 rounded">
             <div className="flex items-center gap-1 text-green-400">
               <CheckCircle className="w-3 h-3" />
-              <span>Cryptographic hashing</span>
+              <span>Succinct proofs</span>
             </div>
           </div>
           <div className="p-2 bg-green-900/20 border border-green-500/30 rounded">
             <div className="flex items-center gap-1 text-green-400">
               <CheckCircle className="w-3 h-3" />
-              <span>Commitment schemes</span>
+              <span>Non-interactive</span>
             </div>
           </div>
           <div className="p-2 bg-green-900/20 border border-green-500/30 rounded">
             <div className="flex items-center gap-1 text-green-400">
               <CheckCircle className="w-3 h-3" />
-              <span>Verifiable proofs</span>
+              <span>Argument of knowledge</span>
             </div>
           </div>
         </div>
@@ -108,7 +134,7 @@ const VerificationResult: React.FC<VerificationResultProps> = ({ proof, onReset 
         className="w-full bg-gradient-to-r from-purple-600 via-cyan-500 to-green-500 text-white py-3 rounded-lg font-medium hover:from-purple-700 hover:via-cyan-600 hover:to-green-600 transition-all duration-200 flex items-center justify-center gap-2"
       >
         <Zap className="w-4 h-4" />
-        Reinitialize Protocol
+        Generate New Proof
       </button>
     </div>
   );

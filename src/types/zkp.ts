@@ -24,4 +24,10 @@ export interface ZKPProof {
   timestamp: number;
   verified: boolean;
   humanScore: number;
+  zkCommitments?: {
+    pattern: string;
+    timing: string;
+    mouse: string;
+  };
+  challenge?: string;
 }
