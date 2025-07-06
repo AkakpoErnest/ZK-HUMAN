@@ -160,45 +160,70 @@ function App() {
 
           {/* Features Grid */}
           <div className="grid lg:grid-cols-3 gap-8 mb-16">
-            <div className="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-8 hover:border-purple-500/30 transition-all duration-300">
-              <div className="p-3 bg-purple-500/20 rounded-xl w-fit mb-4">
-                <User className="w-8 h-8 text-purple-400" />
+            <div className="crypto-card rounded-2xl p-8 group relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-20 h-20 bg-purple-500/5 rounded-full -translate-y-10 translate-x-10 group-hover:scale-150 transition-transform duration-700"></div>
+              <div className="relative z-10">
+                <div className="p-4 bg-purple-500/10 rounded-xl w-fit mb-6 relative">
+                  <User className="w-8 h-8 text-purple-400" />
+                  <div className="absolute inset-0 bg-purple-500/20 rounded-xl blur-sm group-hover:blur-none transition-all duration-300"></div>
+                </div>
+                <h3 className="text-xl font-semibold mb-4 text-white font-mono tracking-wide">
+                  &gt; Human Verification
+                </h3>
+                <p className="text-gray-300 leading-relaxed text-sm">
+                  Advanced behavioral entropy analysis and cognitive pattern
+                  recognition. Neural pathway verification through temporal
+                  interaction signatures and mathematical proof generation.
+                </p>
+                <div className="mt-4 flex items-center gap-2 text-xs font-mono text-purple-400">
+                  <div className="w-1.5 h-1.5 bg-purple-400 rounded-full animate-pulse"></div>
+                  <span>COGNITIVE_ANALYSIS: ACTIVE</span>
+                </div>
               </div>
-              <h3 className="text-xl font-semibold mb-3 text-white">
-                Human Verification
-              </h3>
-              <p className="text-gray-400 leading-relaxed">
-                Advanced behavioral analysis and cognitive challenges that
-                distinguish humans from bots through natural interaction
-                patterns and reasoning abilities.
-              </p>
             </div>
 
-            <div className="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-8 hover:border-cyan-500/30 transition-all duration-300">
-              <div className="p-3 bg-cyan-500/20 rounded-xl w-fit mb-4">
-                <Shield className="w-8 h-8 text-cyan-400" />
+            <div className="crypto-card rounded-2xl p-8 group relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-20 h-20 bg-cyan-500/5 rounded-full -translate-y-10 translate-x-10 group-hover:scale-150 transition-transform duration-700"></div>
+              <div className="relative z-10">
+                <div className="p-4 bg-cyan-500/10 rounded-xl w-fit mb-6 relative">
+                  <Shield className="w-8 h-8 text-cyan-400" />
+                  <div className="absolute inset-0 bg-cyan-500/20 rounded-xl blur-sm group-hover:blur-none transition-all duration-300"></div>
+                </div>
+                <h3 className="text-xl font-semibold mb-4 text-white font-mono tracking-wide">
+                  &gt; Zero Knowledge Proof
+                </h3>
+                <p className="text-gray-300 leading-relaxed text-sm">
+                  Cryptographic commitment schemes with Pedersen hashing.
+                  ZK-SNARK implementations ensuring verifiable computation
+                  without data revelation or identity exposure.
+                </p>
+                <div className="mt-4 flex items-center gap-2 text-xs font-mono text-cyan-400">
+                  <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse"></div>
+                  <span>ZK_CIRCUIT: COMPILED</span>
+                </div>
               </div>
-              <h3 className="text-xl font-semibold mb-3 text-white">
-                Zero Knowledge Proof
-              </h3>
-              <p className="text-gray-400 leading-relaxed">
-                Cryptographic proofs that verify humanity without revealing any
-                personal information, biometric data, or behavioral patterns to
-                third parties.
-              </p>
             </div>
 
-            <div className="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-8 hover:border-green-500/30 transition-all duration-300">
-              <div className="p-3 bg-green-500/20 rounded-xl w-fit mb-4">
-                <Lock className="w-8 h-8 text-green-400" />
+            <div className="crypto-card rounded-2xl p-8 group relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-20 h-20 bg-green-500/5 rounded-full -translate-y-10 translate-x-10 group-hover:scale-150 transition-transform duration-700"></div>
+              <div className="relative z-10">
+                <div className="p-4 bg-green-500/10 rounded-xl w-fit mb-6 relative">
+                  <Lock className="w-8 h-8 text-green-400" />
+                  <div className="absolute inset-0 bg-green-500/20 rounded-xl blur-sm group-hover:blur-none transition-all duration-300"></div>
+                </div>
+                <h3 className="text-xl font-semibold mb-4 text-white font-mono tracking-wide">
+                  &gt; Privacy Protocol
+                </h3>
+                <p className="text-gray-300 leading-relaxed text-sm">
+                  Complete anonymity preservation through cryptographic hashing.
+                  Zero data retention with mathematical guarantees of
+                  information-theoretic privacy protection.
+                </p>
+                <div className="mt-4 flex items-center gap-2 text-xs font-mono text-green-400">
+                  <div className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></div>
+                  <span>PRIVACY_LEVEL: MAXIMUM</span>
+                </div>
               </div>
-              <h3 className="text-xl font-semibold mb-3 text-white">
-                Privacy First
-              </h3>
-              <p className="text-gray-400 leading-relaxed">
-                Complete privacy protection with cryptographic hashing, no data
-                storage, and mathematical guarantees of anonymity preservation.
-              </p>
             </div>
           </div>
 
