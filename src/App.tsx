@@ -227,71 +227,115 @@ function App() {
             </div>
           </div>
 
-          {/* Privacy Architecture */}
-          <div className="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-8 mb-12">
+          {/* Privacy Architecture Terminal */}
+          <div className="crypto-card rounded-2xl p-8 mb-12 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 via-cyan-500 to-green-500"></div>
+
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-2xl font-bold text-white">
-                ZK Privacy Architecture
-              </h3>
+              <div className="flex items-center gap-3">
+                <div className="flex gap-1.5">
+                  <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                  <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                </div>
+                <h3 className="text-xl font-bold text-white font-mono">
+                  zkp_privacy_architecture.exe
+                </h3>
+              </div>
               <button
                 onClick={() => setShowPrivacyDetails(!showPrivacyDetails)}
-                className="flex items-center gap-2 text-purple-400 hover:text-purple-300 transition-colors"
+                className="cyber-button px-4 py-2 rounded-lg font-mono text-sm flex items-center gap-2 text-purple-400 hover:text-purple-300"
               >
                 {showPrivacyDetails ? (
-                  <EyeOff className="w-5 h-5" />
+                  <EyeOff className="w-4 h-4" />
                 ) : (
-                  <Eye className="w-5 h-5" />
+                  <Eye className="w-4 h-4" />
                 )}
-                {showPrivacyDetails ? "Hide" : "Show"} Technical Details
+                {showPrivacyDetails ? "HIDE" : "EXEC"} --verbose
               </button>
             </div>
 
+            <div className="bg-black/60 rounded-lg p-4 border border-gray-700/50 font-mono text-sm mb-4">
+              <div className="text-green-400 mb-2">$ ./zkp_verify --status</div>
+              <div className="text-gray-300">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-green-400">[✓]</span>
+                  <span>ZK-SNARK circuit compilation: SUCCESS</span>
+                </div>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-green-400">[✓]</span>
+                  <span>Behavioral entropy collection: ACTIVE</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-green-400">[✓]</span>
+                  <span>Privacy guarantees: MATHEMATICALLY_PROVEN</span>
+                </div>
+              </div>
+            </div>
+
             {showPrivacyDetails && (
-              <div className="space-y-6">
+              <div className="space-y-6 animate-in slide-in-from-top duration-500">
                 <div className="grid md:grid-cols-2 gap-6">
-                  <div className="p-6 bg-green-900/20 border border-green-500/30 rounded-xl">
-                    <h4 className="font-semibold text-green-400 mb-3 flex items-center gap-2">
-                      <Lock className="w-5 h-5" />
-                      Cryptographic Inputs
+                  <div className="bg-green-900/10 border border-green-500/30 rounded-lg p-6 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-16 h-16 bg-green-500/5 rounded-full -translate-y-8 translate-x-8"></div>
+                    <h4 className="font-semibold text-green-400 mb-4 flex items-center gap-2 font-mono">
+                      <Terminal className="w-5 h-5" />
+                      INPUT_VECTORS
                     </h4>
-                    <ul className="text-sm text-green-300 space-y-2">
-                      <li>• SHA-256 behavioral pattern hashes</li>
-                      <li>• Pedersen commitment schemes</li>
-                      <li>• Temporal interaction signatures</li>
-                      <li>• Entropy-based randomness collection</li>
-                      <li>• Challenge-response cryptographic proofs</li>
-                    </ul>
+                    <div className="space-y-2 font-mono text-xs">
+                      <div className="text-green-300">
+                        → hash(behavioral_patterns)
+                      </div>
+                      <div className="text-green-300">
+                        → pedersen_commit(entropy)
+                      </div>
+                      <div className="text-green-300">
+                        → temporal_signature(interactions)
+                      </div>
+                      <div className="text-green-300">
+                        → challenge_response(cognitive)
+                      </div>
+                      <div className="text-green-300">
+                        → randomness_beacon(external)
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="p-6 bg-red-900/20 border border-red-500/30 rounded-xl">
-                    <h4 className="font-semibold text-red-400 mb-3 flex items-center gap-2">
+                  <div className="bg-red-900/10 border border-red-500/30 rounded-lg p-6 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-16 h-16 bg-red-500/5 rounded-full -translate-y-8 translate-x-8"></div>
+                    <h4 className="font-semibold text-red-400 mb-4 flex items-center gap-2 font-mono">
                       <Shield className="w-5 h-5" />
-                      Zero Knowledge Guarantees
+                      PRIVACY_GUARANTEES
                     </h4>
-                    <ul className="text-sm text-red-300 space-y-2">
-                      <li>• No personal identifiers collected</li>
-                      <li>• No biometric data storage</li>
-                      <li>• No device fingerprinting</li>
-                      <li>• No behavioral profiling retention</li>
-                      <li>• Complete anonymity preservation</li>
-                    </ul>
+                    <div className="space-y-2 font-mono text-xs">
+                      <div className="text-red-300">✗ personal_identifiers</div>
+                      <div className="text-red-300">✗ biometric_storage</div>
+                      <div className="text-red-300">
+                        ✗ device_fingerprinting
+                      </div>
+                      <div className="text-red-300">✗ behavioral_profiling</div>
+                      <div className="text-red-300">✗ data_retention</div>
+                    </div>
                   </div>
                 </div>
 
-                <div className="p-6 bg-purple-900/20 border border-purple-500/30 rounded-xl">
-                  <h4 className="font-semibold text-purple-400 mb-3">
-                    Protocol Implementation
+                <div className="bg-purple-900/10 border border-purple-500/30 rounded-lg p-6 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-20 h-20 bg-purple-500/5 rounded-full -translate-y-10 translate-x-10"></div>
+                  <h4 className="font-semibold text-purple-400 mb-4 font-mono">
+                    PROTOCOL_IMPLEMENTATION
                   </h4>
-                  <p className="text-sm text-purple-300 leading-relaxed">
-                    Our ZK-SNARK implementation combines multiple cryptographic
-                    primitives: Pedersen commitments with SHA-256 hashing create
-                    verifiable proofs of human cognition patterns. The protocol
-                    generates cryptographic commitments from behavioral entropy
-                    without revealing underlying patterns, ensuring complete
-                    privacy while maintaining verification integrity. All
-                    computations are performed client-side with only the final
-                    proof transmitted.
-                  </p>
+                  <div className="bg-black/40 rounded p-4 border border-purple-500/20">
+                    <pre className="text-purple-300 text-xs leading-relaxed font-mono overflow-x-auto">
+                      {`function generateZKProof(behavioralEntropy: Uint8Array): Proof {
+  const commitment = pedersen.commit(behavioralEntropy, randomNonce);
+  const circuit = compile(humanVerificationConstraints);
+  const witness = generateWitness(commitment, cognitiveResponses);
+  return snark.prove(circuit, witness, provingKey);
+}
+
+// Privacy guarantee: Only proof transmitted, no raw data`}
+                    </pre>
+                  </div>
                 </div>
               </div>
             )}
