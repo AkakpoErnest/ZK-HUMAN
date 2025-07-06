@@ -342,50 +342,69 @@ function App() {
           </div>
 
           {/* Action Buttons */}
-          <div className="text-center space-y-6">
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="text-center space-y-8">
+            <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <button
                 onClick={handleStartVerification}
-                className="bg-gradient-to-r from-purple-600 via-cyan-500 to-green-500 text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:from-purple-700 hover:via-cyan-600 hover:to-green-600 transform hover:scale-105 transition-all duration-300 shadow-2xl hover:shadow-purple-500/25"
+                className="relative group px-8 py-4 bg-gradient-to-r from-purple-600/20 via-cyan-500/20 to-green-500/20 border border-purple-500/30 rounded-xl font-mono font-semibold text-lg text-white overflow-hidden transition-all duration-300 hover:border-purple-400/60 hover:shadow-lg hover:shadow-purple-500/25"
               >
-                Try ZK Verification
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-cyan-500 to-green-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                <span className="relative z-10 flex items-center justify-center gap-2">
+                  <Shield className="w-5 h-5" />
+                  EXECUTE_VERIFICATION()
+                </span>
               </button>
+
               <button
                 onClick={() => setCurrentView("docs")}
-                className="bg-gray-800/50 backdrop-blur-sm border border-gray-600/50 text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:border-purple-500/50 hover:bg-purple-500/10 transition-all duration-300 flex items-center justify-center gap-2"
+                className="cyber-button px-8 py-4 rounded-xl font-mono font-semibold text-lg text-white flex items-center justify-center gap-2 group"
               >
-                <Book className="w-5 h-5" />
-                Implementation Guide
+                <Book className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
+                ACCESS_DOCUMENTATION
               </button>
             </div>
-            <p className="text-sm text-gray-400">
-              Demo execution: 30-60 seconds • No registration required • Full
-              privacy guaranteed
-            </p>
+
+            <div className="bg-gray-900/40 border border-gray-700/30 rounded-lg p-4 max-w-2xl mx-auto backdrop-blur-sm">
+              <div className="flex items-center justify-center gap-6 text-sm font-mono">
+                <div className="flex items-center gap-2 text-green-400">
+                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                  <span>EXEC_TIME: 30-60s</span>
+                </div>
+                <div className="flex items-center gap-2 text-cyan-400">
+                  <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+                  <span>AUTH_REQ: NONE</span>
+                </div>
+                <div className="flex items-center gap-2 text-purple-400">
+                  <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
+                  <span>PRIVACY: MAX</span>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Quick Links */}
-          <div className="mt-16 flex justify-center gap-8">
+          <div className="mt-16 flex flex-wrap justify-center gap-8">
             <a
               href="#"
-              className="flex items-center gap-2 text-gray-400 hover:text-purple-400 transition-colors"
+              className="cyber-button px-4 py-2 rounded-lg flex items-center gap-2 text-gray-300 hover:text-purple-400 transition-colors font-mono text-sm group"
             >
-              <Github className="w-5 h-5" />
-              <span>Source Code</span>
+              <Github className="w-4 h-4 group-hover:rotate-12 transition-transform duration-300" />
+              <span>source.git</span>
             </a>
             <a
               href="#"
-              className="flex items-center gap-2 text-gray-400 hover:text-cyan-400 transition-colors"
+              className="cyber-button px-4 py-2 rounded-lg flex items-center gap-2 text-gray-300 hover:text-cyan-400 transition-colors font-mono text-sm group"
             >
-              <Code className="w-5 h-5" />
-              <span>API Reference</span>
+              <Code className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
+              <span>api.docs</span>
             </a>
             <a
               href="#"
-              className="flex items-center gap-2 text-gray-400 hover:text-green-400 transition-colors"
+              className="cyber-button px-4 py-2 rounded-lg flex items-center gap-2 text-gray-300 hover:text-green-400 transition-colors font-mono text-sm group"
             >
-              <Terminal className="w-5 h-5" />
-              <span>Examples</span>
+              <Terminal className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
+              <span>examples.sh</span>
             </a>
           </div>
         </div>
