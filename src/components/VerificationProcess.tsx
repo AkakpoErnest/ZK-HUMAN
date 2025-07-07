@@ -21,7 +21,9 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
   const [challengeResults, setChallengeResults] = useState<any[]>([]);
   const [progress, setProgress] = useState(0);
   const [processingStep, setProcessingStep] = useState(0);
-  const [attempts, setAttempts] = useState(0);
+  const [patternAttempts, setPatternAttempts] = useState(0);
+  const [cognitiveAttempts, setCognitiveAttempts] = useState(0);
+  const [challengeKey, setChallengeKey] = useState(0);
   const [maxAttempts] = useState(3);
   const [behavioralAnalyzer] = useState(() => new BehavioralAnalyzer());
 
@@ -59,33 +61,43 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
     onInteraction();
 
     if (currentChallenge === 'pattern') {
-      if (success || attempts >= maxAttempts - 1) {
+      const currentAttempts = patternAttempts + 1;
+      setPatternAttempts(currentAttempts);
+      
+      if (success || currentAttempts >= maxAttempts) {
+        // Add final result and move to next challenge
+        setChallengeResults(prev => [...prev, result]);
         setProgress(66);
-        setTimeout(() => setCurrentChallenge('cognitive'), 1000);
-        setAttempts(0);
-      } else {
-        setAttempts(prev => prev + 1);
-        // Allow retry for pattern challenge
         setTimeout(() => {
-          // Reset for retry
-          setChallengeResults(prev => prev.slice(0, -1));
+          setCurrentChallenge('cognitive');
+          setChallengeKey(prev => prev + 1);
+        }, 1000);
+      } else {
+        // Reset challenge for retry
+        setTimeout(() => {
+          setChallengeKey(prev => prev + 1);
         }, 1500);
       }
     } else if (currentChallenge === 'cognitive') {
-      if (success || attempts >= maxAttempts - 1) {
+      const currentAttempts = cognitiveAttempts + 1;
+      setCognitiveAttempts(currentAttempts);
+      
+      if (success || currentAttempts >= maxAttempts) {
+        // Add final result and generate proof
+        const finalResults = [...challengeResults, result];
+        setChallengeResults(finalResults);
         setProgress(100);
         setCurrentChallenge('processing');
         
         // Generate real ZK proof
         setTimeout(async () => {
-          const proof = await generateZKProof(newResults);
+          const proof = await generateZKProof(finalResults);
           onComplete(proof);
         }, 4000);
       } else {
-        setAttempts(prev => prev + 1);
-        // Allow retry for cognitive challenge
+        // Reset challenge for retry
         setTimeout(() => {
-          setChallengeResults(prev => prev.slice(0, -1));
+          setChallengeKey(prev => prev + 1);
         }, 1500);
       }
     }
@@ -127,14 +139,15 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
         return (
           <div>
             <PatternChallenge 
+              key={`pattern-${challengeKey}`}
               onComplete={handleChallengeComplete}
               onInteraction={onInteraction}
             />
-            {attempts > 0 && attempts < maxAttempts && (
+            {patternAttempts > 0 && patternAttempts < maxAttempts && (
               <div className="mt-4 text-center">
                 <div className="flex items-center justify-center gap-2 text-yellow-400 text-sm">
                   <RotateCcw className="w-4 h-4" />
-                  <span>Attempt {attempts + 1} of {maxAttempts}</span>
+                  <span>Attempt {patternAttempts + 1} of {maxAttempts}</span>
                 </div>
               </div>
             )}
@@ -144,14 +157,15 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
         return (
           <div>
             <CognitiveChallenge 
+              key={`cognitive-${challengeKey}`}
               onComplete={handleChallengeComplete}
               onInteraction={onInteraction}
             />
-            {attempts > 0 && attempts < maxAttempts && (
+            {cognitiveAttempts > 0 && cognitiveAttempts < maxAttempts && (
               <div className="mt-4 text-center">
                 <div className="flex items-center justify-center gap-2 text-yellow-400 text-sm">
                   <RotateCcw className="w-4 h-4" />
-                  <span>Attempt {attempts + 1} of {maxAttempts}</span>
+                  <span>Attempt {cognitiveAttempts + 1} of {maxAttempts}</span>
                 </div>
               </div>
             )}
