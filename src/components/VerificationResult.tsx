@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle, XCircle, Shield, User, Cpu, Zap, Key, Hash } from 'lucide-react';
+import { CheckCircle, XCircle, Shield, User, Cpu, Zap, Key, Hash, Copy, Check, ExternalLink, Blocks } from 'lucide-react';
 import { ZKPProof } from '../types/zkp';
 
 interface VerificationResultProps {
@@ -8,6 +8,9 @@ interface VerificationResultProps {
 }
 
 const VerificationResult: React.FC<VerificationResultProps> = ({ proof, onReset }) => {
+  const [copiedHash, setCopiedHash] = React.useState(false);
+  const [copiedProof, setCopiedProof] = React.useState(false);
+
   const getScoreColor = (score: number) => {
     if (score >= 80) return 'text-green-400';
     if (score >= 60) return 'text-yellow-400';
@@ -20,6 +23,30 @@ const VerificationResult: React.FC<VerificationResultProps> = ({ proof, onReset 
     return <Cpu className="w-6 h-6 text-red-400" />;
   };
 
+  const copyToClipboard = async (text: string, type: 'hash' | 'proof') => {
+    try {
+      await navigator.clipboard.writeText(text);
+      if (type === 'hash') {
+        setCopiedHash(true);
+        setTimeout(() => setCopiedHash(false), 2000);
+      } else {
+        setCopiedProof(true);
+        setTimeout(() => setCopiedProof(false), 2000);
+      }
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  };
+
+  const fullProofData = {
+    id: proof.id,
+    hash: proof.hash,
+    timestamp: proof.timestamp,
+    verified: proof.verified,
+    humanScore: proof.humanScore,
+    zkCommitments: proof.zkCommitments,
+    challenge: proof.challenge
+  };
   return (
     <div className="max-w-md mx-auto bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl shadow-2xl p-8">
       <div className="text-center mb-8">
@@ -58,14 +85,32 @@ const VerificationResult: React.FC<VerificationResultProps> = ({ proof, onReset 
           </div>
         </div>
 
-        <div className="flex items-center justify-between p-4 bg-gray-700/30 border border-gray-600/30 rounded-lg">
-          <span className="text-sm font-medium text-gray-300 flex items-center gap-2">
-            <Hash className="w-4 h-4" />
-            ZK Proof Hash
-          </span>
-          <span className="text-xs font-mono text-purple-400">
-            {proof.hash.substring(0, 8)}...
-          </span>
+        <div className="p-4 bg-gray-700/30 border border-gray-600/30 rounded-lg">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm font-medium text-gray-300 flex items-center gap-2">
+              <Hash className="w-4 h-4" />
+              ZK Proof Hash
+            </span>
+            <button
+              onClick={() => copyToClipboard(proof.hash, 'hash')}
+              className="flex items-center gap-1 px-2 py-1 bg-purple-600/20 border border-purple-500/30 rounded text-xs text-purple-400 hover:bg-purple-600/30 transition-colors"
+            >
+              {copiedHash ? (
+                <>
+                  <Check className="w-3 h-3" />
+                  Copied!
+                </>
+              ) : (
+                <>
+                  <Copy className="w-3 h-3" />
+                  Copy
+                </>
+              )}
+            </button>
+          </div>
+          <div className="text-xs font-mono text-purple-400 break-all bg-black/20 p-2 rounded border">
+            {proof.hash}
+          </div>
         </div>
 
         {proof.zkCommitments && (
@@ -96,6 +141,57 @@ const VerificationResult: React.FC<VerificationResultProps> = ({ proof, onReset 
           <span className="text-xs text-gray-400">
             {new Date(proof.timestamp).toLocaleString()}
           </span>
+        </div>
+
+        {/* Blockchain Integration Section */}
+        <div className="p-4 bg-blue-900/20 border border-blue-500/30 rounded-lg">
+          <div className="flex items-center gap-2 mb-3">
+            <Blocks className="w-4 h-4 text-blue-400" />
+            <span className="text-sm font-medium text-blue-300">Blockchain Ready</span>
+          </div>
+          <div className="text-xs text-gray-400 space-y-2">
+            <p>This ZK proof can be submitted to blockchain networks:</p>
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>
+                <span>Ethereum (via smart contract)</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>
+                <span>Polygon (lower gas fees)</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>
+                <span>zkSync (native ZK support)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Export Full Proof */}
+        <div className="p-4 bg-gray-700/30 border border-gray-600/30 rounded-lg">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm font-medium text-gray-300">Full Proof Data</span>
+            <button
+              onClick={() => copyToClipboard(JSON.stringify(fullProofData, null, 2), 'proof')}
+              className="flex items-center gap-1 px-2 py-1 bg-green-600/20 border border-green-500/30 rounded text-xs text-green-400 hover:bg-green-600/30 transition-colors"
+            >
+              {copiedProof ? (
+                <>
+                  <Check className="w-3 h-3" />
+                  Copied!
+                </>
+              ) : (
+                <>
+                  <Copy className="w-3 h-3" />
+                  Copy JSON
+                </>
+              )}
+            </button>
+          </div>
+          <p className="text-xs text-gray-400">
+            Complete proof data for blockchain submission or API verification
+          </p>
         </div>
       </div>
 
@@ -129,13 +225,25 @@ const VerificationResult: React.FC<VerificationResultProps> = ({ proof, onReset 
         </div>
       </div>
 
-      <button
-        onClick={onReset}
-        className="w-full bg-gradient-to-r from-purple-600 via-cyan-500 to-green-500 text-white py-3 rounded-lg font-medium hover:from-purple-700 hover:via-cyan-600 hover:to-green-600 transition-all duration-200 flex items-center justify-center gap-2"
-      >
-        <Zap className="w-4 h-4" />
-        Generate New Proof
-      </button>
+      <div className="space-y-3">
+        <button
+          onClick={onReset}
+          className="w-full bg-gradient-to-r from-purple-600 via-cyan-500 to-green-500 text-white py-3 rounded-lg font-medium hover:from-purple-700 hover:via-cyan-600 hover:to-green-600 transition-all duration-200 flex items-center justify-center gap-2"
+        >
+          <Zap className="w-4 h-4" />
+          Generate New Proof
+        </button>
+        
+        <div className="text-center">
+          <a
+            href="#"
+            className="inline-flex items-center gap-2 text-xs text-blue-400 hover:text-blue-300 transition-colors"
+          >
+            <ExternalLink className="w-3 h-3" />
+            Learn about blockchain integration
+          </a>
+        </div>
+      </div>
     </div>
   );
 };
