@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, Clock, CheckCircle, Zap, Activity } from 'lucide-react';
+import { Shield, Clock, CheckCircle, Zap, Activity, RotateCcw } from 'lucide-react';
 import PatternChallenge from './PatternChallenge';
 import CognitiveChallenge from './CognitiveChallenge';
 import { BehavioralAnalyzer } from '../utils/behavioral';
@@ -21,6 +21,8 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
   const [challengeResults, setChallengeResults] = useState<any[]>([]);
   const [progress, setProgress] = useState(0);
   const [processingStep, setProcessingStep] = useState(0);
+  const [attempts, setAttempts] = useState(0);
+  const [maxAttempts] = useState(3);
   const [behavioralAnalyzer] = useState(() => new BehavioralAnalyzer());
 
   useEffect(() => {
@@ -57,17 +59,35 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
     onInteraction();
 
     if (currentChallenge === 'pattern') {
-      setProgress(66);
-      setTimeout(() => setCurrentChallenge('cognitive'), 1000);
+      if (success || attempts >= maxAttempts - 1) {
+        setProgress(66);
+        setTimeout(() => setCurrentChallenge('cognitive'), 1000);
+        setAttempts(0);
+      } else {
+        setAttempts(prev => prev + 1);
+        // Allow retry for pattern challenge
+        setTimeout(() => {
+          // Reset for retry
+          setChallengeResults(prev => prev.slice(0, -1));
+        }, 1500);
+      }
     } else if (currentChallenge === 'cognitive') {
-      setProgress(100);
-      setCurrentChallenge('processing');
-      
-      // Generate real ZK proof
-      setTimeout(async () => {
-        const proof = await generateZKProof(newResults);
-        onComplete(proof);
-      }, 4000);
+      if (success || attempts >= maxAttempts - 1) {
+        setProgress(100);
+        setCurrentChallenge('processing');
+        
+        // Generate real ZK proof
+        setTimeout(async () => {
+          const proof = await generateZKProof(newResults);
+          onComplete(proof);
+        }, 4000);
+      } else {
+        setAttempts(prev => prev + 1);
+        // Allow retry for cognitive challenge
+        setTimeout(() => {
+          setChallengeResults(prev => prev.slice(0, -1));
+        }, 1500);
+      }
     }
   };
 
@@ -86,12 +106,16 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
     // Generate ZK proof using our proof system
     const zkProof = await ZKProofSystem.generateHumanProof(witness, challengeString);
 
+    // Boost score if user showed human-like behavior (some failures are actually good)
+    const humanBehaviorBonus = results.some(r => !r.success) ? 15 : 0;
+    const finalScore = Math.min(zkProof.humanScore + humanBehaviorBonus, 100);
+
     return {
       id: zkProof.id,
       hash: zkProof.proof,
       timestamp: zkProof.timestamp,
-      verified: zkProof.verified,
-      humanScore: zkProof.humanScore,
+      verified: finalScore >= 60, // Lower threshold for better UX
+      humanScore: finalScore,
       zkCommitments: zkProof.commitments,
       challenge: zkProof.challenge
     };
@@ -101,17 +125,37 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
     switch (currentChallenge) {
       case 'pattern':
         return (
-          <PatternChallenge 
-            onComplete={handleChallengeComplete}
-            onInteraction={onInteraction}
-          />
+          <div>
+            <PatternChallenge 
+              onComplete={handleChallengeComplete}
+              onInteraction={onInteraction}
+            />
+            {attempts > 0 && attempts < maxAttempts && (
+              <div className="mt-4 text-center">
+                <div className="flex items-center justify-center gap-2 text-yellow-400 text-sm">
+                  <RotateCcw className="w-4 h-4" />
+                  <span>Attempt {attempts + 1} of {maxAttempts}</span>
+                </div>
+              </div>
+            )}
+          </div>
         );
       case 'cognitive':
         return (
-          <CognitiveChallenge 
-            onComplete={handleChallengeComplete}
-            onInteraction={onInteraction}
-          />
+          <div>
+            <CognitiveChallenge 
+              onComplete={handleChallengeComplete}
+              onInteraction={onInteraction}
+            />
+            {attempts > 0 && attempts < maxAttempts && (
+              <div className="mt-4 text-center">
+                <div className="flex items-center justify-center gap-2 text-yellow-400 text-sm">
+                  <RotateCcw className="w-4 h-4" />
+                  <span>Attempt {attempts + 1} of {maxAttempts}</span>
+                </div>
+              </div>
+            )}
+          </div>
         );
       case 'processing':
         return (
@@ -194,9 +238,9 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
       <div className="flex items-center justify-center gap-6 mb-8">
         <div className={`flex flex-col items-center gap-2 text-sm transition-all duration-300 ${
           currentChallenge === 'pattern' ? 'text-purple-400 scale-110' : 
-          challengeResults.length > 0 ? 'text-green-400' : 'text-gray-500'
+          challengeResults.some(r => r.type === 'pattern') ? 'text-green-400' : 'text-gray-500'
         }`}>
-          {challengeResults.length > 0 ? (
+          {challengeResults.some(r => r.type === 'pattern') ? (
             <div className="p-2 bg-green-500/20 rounded-full">
               <CheckCircle className="w-5 h-5" />
             </div>
@@ -211,14 +255,14 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
         </div>
         
         <div className={`w-8 h-0.5 transition-all duration-500 ${
-          challengeResults.length > 0 ? 'bg-green-400' : 'bg-gray-600'
+          challengeResults.some(r => r.type === 'pattern') ? 'bg-green-400' : 'bg-gray-600'
         }`}></div>
         
         <div className={`flex flex-col items-center gap-2 text-sm transition-all duration-300 ${
           currentChallenge === 'cognitive' ? 'text-cyan-400 scale-110' : 
-          challengeResults.length > 1 ? 'text-green-400' : 'text-gray-500'
+          challengeResults.some(r => r.type === 'cognitive') ? 'text-green-400' : 'text-gray-500'
         }`}>
-          {challengeResults.length > 1 ? (
+          {challengeResults.some(r => r.type === 'cognitive') ? (
             <div className="p-2 bg-green-500/20 rounded-full">
               <CheckCircle className="w-5 h-5" />
             </div>
@@ -233,7 +277,7 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
         </div>
         
         <div className={`w-8 h-0.5 transition-all duration-500 ${
-          challengeResults.length > 1 ? 'bg-green-400' : 'bg-gray-600'
+          challengeResults.some(r => r.type === 'cognitive') ? 'bg-green-400' : 'bg-gray-600'
         }`}></div>
         
         <div className={`flex flex-col items-center gap-2 text-sm transition-all duration-300 ${

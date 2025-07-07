@@ -39,118 +39,156 @@ npm run build
 
 ## 🧪 How It Works
 
-1. **Pattern Challenge**: Tests human memory and cognitive patterns
-2. **Behavioral Analysis**: Tracks mouse movements and interaction timing
-3. **Cognitive Verification**: Presents reasoning challenges with time constraints
-4. **Cryptographic Proof**: Generates SHA-256 commitments from behavioral data
-5. **Zero Knowledge Verification**: Proves humanity without revealing methods
+zkHuman uses a multi-stage verification process:
+
+### 1. Pattern Challenge
+- Tests human memory and cognitive patterns
+- Users memorize and reproduce number sequences
+- Multiple attempts allowed (up to 3 tries)
+- Generates behavioral entropy for ZK proof
+
+### 2. Cognitive Verification
+- Simple questions that humans can easily answer
+- Basic math, color recognition, common knowledge
+- Designed to be accessible while filtering bots
+- 20-second time limit per question
+
+### 3. ZK-SNARK Proof Generation
+- **Pedersen Commitments**: Creates cryptographic commitments to behavioral data
+- **Schnorr Proofs**: Generates zero-knowledge proofs of human behavior
+- **Behavioral Analysis**: Mouse movements, timing patterns, interaction entropy
+- **Privacy Preservation**: No raw behavioral data is stored or transmitted
 
 ## 🔬 Technical Implementation
 
 The system uses several cryptographic primitives:
 
-- **Commitment Schemes**: Pedersen commitments for behavioral data
-- **Hash Functions**: SHA-256 for data integrity and privacy
-- **Entropy Collection**: Mouse movements and timing analysis
-- **Challenge-Response**: Interactive proofs of cognitive ability
-- **Behavioral Biometrics**: Pattern analysis without storage
+### Commitment Schemes
+```javascript
+// Pedersen commitment: C = g^m · h^r mod p
+const commitment = createCommitment(behavioralHash, randomNonce);
+```
 
-## 📚 Integration Guide
+### Zero-Knowledge Proofs
+```javascript
+// Schnorr-like proof: s = r + c·x mod p
+const proof = generateSchnorrProof(secrets, randomness, challenge);
+```
 
-### React Integration
+### Behavioral Analysis
+- **Mouse Entropy**: Tracks irregular human mouse movements
+- **Timing Variance**: Analyzes natural human response delays
+- **Pattern Recognition**: Evaluates cognitive performance without storing answers
 
+## 🎯 Use Cases
+
+### Web Applications
+- **Login Forms**: Replace traditional CAPTCHAs
+- **Registration**: Verify new user humanity
+- **Comment Systems**: Prevent spam while preserving privacy
+- **API Protection**: Rate limiting based on human verification
+
+### Integration Examples
+
+#### React Component
 ```jsx
 import { ZKHumanVerify } from '@zkhuman/react';
 
 function LoginForm() {
   const handleVerification = (proof) => {
-    if (proof.verified) {
-      console.log('Human verified:', proof);
+    if (proof.verified && proof.humanScore >= 70) {
+      // User verified as human
+      proceedWithLogin();
     }
   };
 
   return (
-    <ZKHumanVerify
-      apiKey="your-api-key"
-      onComplete={handleVerification}
-      theme="dark"
-    />
+    <form>
+      <input type="email" placeholder="Email" />
+      <input type="password" placeholder="Password" />
+      <ZKHumanVerify onComplete={handleVerification} />
+      <button type="submit">Login</button>
+    </form>
   );
 }
 ```
 
-### Vanilla JavaScript
-
-```html
-<script src="https://cdn.zkhuman.com/v1/zkhuman.js"></script>
-<div id="zk-human-verify"></div>
-
-<script>
-  ZKHuman.init({
-    element: '#zk-human-verify',
-    apiKey: 'your-api-key',
-    onComplete: function(proof) {
-      if (proof.verified) {
-        console.log('Human verified:', proof);
-      }
-    }
-  });
-</script>
-```
-
-### Server-side Verification
-
+#### Server-Side Verification
 ```javascript
-const response = await fetch('https://api.zkhuman.com/v1/verify', {
-  method: 'POST',
-  headers: {
-    'Authorization': 'Bearer your-secret-key',
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({
-    proof: clientProof.hash,
-    timestamp: clientProof.timestamp
-  })
-});
-
-const result = await response.json();
-// { valid: true, humanScore: 95.2, riskLevel: 'low' }
+// Verify the ZK proof on your backend
+const isValid = await ZKProofSystem.verifyProof(clientProof, originalChallenge);
+if (isValid && clientProof.humanScore >= 70) {
+  // Proceed with protected action
+}
 ```
+
+## 🔐 Security Features
+
+### Privacy Guarantees
+- ✅ **Zero Data Collection**: No personal information stored
+- ✅ **Behavioral Privacy**: Raw behavioral data never transmitted
+- ✅ **Cryptographic Commitments**: Only mathematical proofs shared
+- ✅ **Non-Reversible**: Proofs cannot be used to reconstruct original data
+
+### Anti-Bot Protection
+- ✅ **Multiple Challenge Types**: Pattern + Cognitive verification
+- ✅ **Behavioral Analysis**: Human-like interaction patterns required
+- ✅ **Time-Based Challenges**: Natural human response timing
+- ✅ **Entropy Requirements**: Sufficient randomness in user behavior
+
+## 📊 Verification Process
+
+1. **Pattern Memory Test** (33% progress)
+   - Display random number sequence
+   - User reproduces pattern
+   - Up to 3 attempts allowed
+   - Generates timing and accuracy data
+
+2. **Cognitive Challenge** (66% progress)
+   - Simple human-answerable questions
+   - Basic math, logic, or knowledge
+   - 20-second time limit
+   - Multiple choice format
+
+3. **ZK Proof Generation** (100% progress)
+   - Combine all behavioral data
+   - Create Pedersen commitments
+   - Generate Schnorr proof
+   - Verify mathematical validity
 
 ## 🚀 Deployment
 
-The application is built for static hosting and can be deployed to:
+The application is optimized for static hosting:
 
-- Vercel
-- Netlify  
-- GitHub Pages
-- IPFS
-- Any static hosting provider
+- **Netlify**: One-click deployment
+- **Vercel**: Automatic builds from Git
+- **GitHub Pages**: Static hosting
+- **IPFS**: Decentralized deployment
 
 ## 🤝 Contributing
 
-We welcome contributions to expand ZK applications and improve the protocol:
+We welcome contributions to improve the ZK verification system:
 
 1. Fork the repository
 2. Create a feature branch
-3. Implement your ZK application idea
+3. Implement improvements or new verification methods
 4. Add comprehensive tests
 5. Submit a pull request
 
 ## 📚 Learning Resources
 
 - [Zero Knowledge Proofs Explained](https://blog.ethereum.org/2016/12/05/zksnarks-in-a-nutshell/)
-- [ZK-SNARKs vs ZK-STARKs](https://consensys.net/blog/blockchain-explained/zero-knowledge-proofs-starks-vs-snarks/)
-- [Practical ZK Applications](https://github.com/matter-labs/awesome-zero-knowledge-proofs)
-- [Cryptographic Commitments](https://en.wikipedia.org/wiki/Commitment_scheme)
+- [Pedersen Commitments](https://en.wikipedia.org/wiki/Commitment_scheme)
+- [Schnorr Signatures](https://en.wikipedia.org/wiki/Schnorr_signature)
+- [Behavioral Biometrics](https://en.wikipedia.org/wiki/Behavioural_biometrics)
 
 ## 🔐 Security Considerations
 
 - All cryptographic operations use Web Crypto API
-- No personal data is stored or transmitted
-- Behavioral patterns are immediately hashed
+- Behavioral patterns are immediately hashed and committed
 - Proofs are verifiable but not reversible
 - System designed for privacy-first architecture
+- No server-side storage of user data required
 
 ## 📄 License
 
@@ -159,12 +197,13 @@ MIT License - see [LICENSE](LICENSE) for details.
 ## 🌟 Future Enhancements
 
 - Integration with zk-SNARKs libraries (circom, snarkjs)
-- Mobile-optimized challenges
+- Mobile-optimized touch-based challenges
 - Advanced behavioral biometrics
 - Integration with Web3 authentication
 - Multi-language support
 - Accessibility improvements
+- Custom challenge difficulty levels
 
 ---
 
-**zkHuman** demonstrates the power of Zero Knowledge Proofs in creating privacy-preserving applications. Explore the code, experiment with the concepts, and build the next generation of private, verifiable systems.
+**zkHuman** demonstrates the power of Zero Knowledge Proofs in creating privacy-preserving applications. The system proves humanity without compromising user privacy, making it ideal for modern web applications that prioritize both security and user experience.

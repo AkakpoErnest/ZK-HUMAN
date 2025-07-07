@@ -9,7 +9,7 @@ interface CognitiveChallengeProps {
 const CognitiveChallenge: React.FC<CognitiveChallengeProps> = ({ onComplete, onInteraction }) => {
   const [challenge, setChallenge] = useState<any>(null);
   const [userAnswer, setUserAnswer] = useState<string>('');
-  const [timeLeft, setTimeLeft] = useState(15);
+  const [timeLeft, setTimeLeft] = useState(20);
 
   useEffect(() => {
     generateChallenge();
@@ -30,27 +30,39 @@ const CognitiveChallenge: React.FC<CognitiveChallengeProps> = ({ onComplete, onI
   const generateChallenge = () => {
     const challenges = [
       {
-        type: 'word_association',
-        question: 'What concept is most associated with "Cryptography"?',
-        options: ['Security', 'Cooking', 'Dancing', 'Weather'],
-        correct: 0
-      },
-      {
-        type: 'logic',
-        question: 'If all ZK proofs are verifiable, and some verifications are instant, then:',
-        options: ['All proofs are instant', 'Some ZK proofs might verify instantly', 'No proofs verify', 'All verifications are proofs'],
+        type: 'simple_math',
+        question: 'What is 5 + 3?',
+        options: ['7', '8', '9', '10'],
         correct: 1
       },
       {
-        type: 'pattern',
-        question: 'What comes next in the sequence: 1, 1, 2, 3, 5, 8, ?',
-        options: ['11', '13', '10', '15'],
+        type: 'color_recognition',
+        question: 'What color do you get when you mix red and blue?',
+        options: ['Green', 'Purple', 'Yellow', 'Orange'],
         correct: 1
       },
       {
-        type: 'context',
-        question: 'Which behavior indicates human-like reasoning?',
-        options: ['Perfect calculation speed', 'Intuitive pattern recognition', 'Infinite memory storage', 'Deterministic responses'],
+        type: 'basic_logic',
+        question: 'Which one is different?',
+        options: ['Cat', 'Dog', 'Bird', 'Car'],
+        correct: 3
+      },
+      {
+        type: 'simple_pattern',
+        question: 'What comes next: 2, 4, 6, ?',
+        options: ['7', '8', '9', '10'],
+        correct: 1
+      },
+      {
+        type: 'common_knowledge',
+        question: 'How many days are in a week?',
+        options: ['5', '6', '7', '8'],
+        correct: 2
+      },
+      {
+        type: 'basic_shapes',
+        question: 'How many sides does a triangle have?',
+        options: ['2', '3', '4', '5'],
         correct: 1
       }
     ];
@@ -72,7 +84,7 @@ const CognitiveChallenge: React.FC<CognitiveChallengeProps> = ({ onComplete, onI
       <div className="mb-6">
         <h3 className="text-xl font-semibold mb-2 flex items-center justify-center gap-2 text-white">
           <Brain className="w-5 h-5 text-cyan-400" />
-          Cognitive Verification
+          Human Verification
         </h3>
         <div className="flex items-center justify-center gap-2 text-sm text-gray-400">
           <span>Time remaining:</span>
@@ -104,7 +116,7 @@ const CognitiveChallenge: React.FC<CognitiveChallengeProps> = ({ onComplete, onI
       <div className="w-full bg-gray-700 rounded-full h-2">
         <div 
           className="bg-gradient-to-r from-cyan-500 to-purple-500 h-2 rounded-full transition-all duration-1000"
-          style={{ width: `${(timeLeft / 15) * 100}%` }}
+          style={{ width: `${(timeLeft / 20) * 100}%` }}
         ></div>
       </div>
     </div>
