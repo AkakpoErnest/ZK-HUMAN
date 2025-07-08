@@ -236,11 +236,11 @@ const VerificationResult: React.FC<VerificationResultProps> = ({ proof, onReset 
         
         <div className="text-center">
           <a
-            href="#"
+            href="https://docs.zkhuman.dev/blockchain"
             className="inline-flex items-center gap-2 text-xs text-blue-400 hover:text-blue-300 transition-colors"
           >
             <ExternalLink className="w-3 h-3" />
-            Learn about blockchain integration
+            Deploy to blockchain networks
           </a>
         </div>
       </div>

@@ -56,8 +56,6 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
 
   const handleChallengeComplete = async (success: boolean, response: any) => {
     const result = { type: currentChallenge, success, response, timestamp: Date.now() };
-    const newResults = [...challengeResults, result];
-    setChallengeResults(newResults);
     
     onInteraction();
 
@@ -66,7 +64,7 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
       setPatternAttempts(currentAttempts);
       
       if (success || currentAttempts >= maxPatternAttempts) {
-        // Add final result and move to next challenge
+        // Add result and move to next challenge
         setChallengeResults(prev => [...prev, result]);
         setProgress(66);
         setTimeout(() => {
@@ -74,6 +72,8 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
           setChallengeKey(prev => prev + 1);
         }, 1000);
       } else {
+        // Add failed attempt result
+        setChallengeResults(prev => [...prev, result]);
         // Reset challenge for retry
         setTimeout(() => {
           setChallengeKey(prev => prev + 1);
@@ -84,9 +84,9 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
       setCognitiveAttempts(currentAttempts);
       
       if (success || currentAttempts >= maxCognitiveAttempts) {
-        // Add final result and generate proof
+        // Add result and generate proof
+        setChallengeResults(prev => [...prev, result]);
         const finalResults = [...challengeResults, result];
-        setChallengeResults(finalResults);
         setProgress(100);
         setCurrentChallenge('processing');
         
@@ -96,6 +96,8 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
           onComplete(proof);
         }, 4000);
       } else {
+        // Add failed attempt result
+        setChallengeResults(prev => [...prev, result]);
         // Reset challenge for retry
         setTimeout(() => {
           setChallengeKey(prev => prev + 1);
