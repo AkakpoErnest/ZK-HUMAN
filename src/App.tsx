@@ -352,7 +352,7 @@ function App() {
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
                 <span className="relative z-10 flex items-center justify-center gap-2">
                   <Shield className="w-5 h-5" />
-                  EXECUTE_VERIFICATION()
+                  PROOF_OF_HUMANITY()
                 </span>
               </button>
 

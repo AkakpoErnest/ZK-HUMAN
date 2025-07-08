@@ -24,7 +24,8 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
   const [patternAttempts, setPatternAttempts] = useState(0);
   const [cognitiveAttempts, setCognitiveAttempts] = useState(0);
   const [challengeKey, setChallengeKey] = useState(0);
-  const [maxAttempts] = useState(3);
+  const [maxPatternAttempts] = useState(3);
+  const [maxCognitiveAttempts] = useState(2);
   const [behavioralAnalyzer] = useState(() => new BehavioralAnalyzer());
 
   useEffect(() => {
@@ -64,7 +65,7 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
       const currentAttempts = patternAttempts + 1;
       setPatternAttempts(currentAttempts);
       
-      if (success || currentAttempts >= maxAttempts) {
+      if (success || currentAttempts >= maxPatternAttempts) {
         // Add final result and move to next challenge
         setChallengeResults(prev => [...prev, result]);
         setProgress(66);
@@ -82,7 +83,7 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
       const currentAttempts = cognitiveAttempts + 1;
       setCognitiveAttempts(currentAttempts);
       
-      if (success || currentAttempts >= maxAttempts) {
+      if (success || currentAttempts >= maxCognitiveAttempts) {
         // Add final result and generate proof
         const finalResults = [...challengeResults, result];
         setChallengeResults(finalResults);
@@ -147,7 +148,7 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
               <div className="mt-4 text-center">
                 <div className="flex items-center justify-center gap-2 text-yellow-400 text-sm">
                   <RotateCcw className="w-4 h-4" />
-                  <span>Attempt {patternAttempts + 1} of {maxAttempts}</span>
+                  <span>Attempt {patternAttempts + 1} of {maxPatternAttempts}</span>
                 </div>
               </div>
             )}
@@ -165,7 +166,7 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
               <div className="mt-4 text-center">
                 <div className="flex items-center justify-center gap-2 text-yellow-400 text-sm">
                   <RotateCcw className="w-4 h-4" />
-                  <span>Attempt {cognitiveAttempts + 1} of {maxAttempts}</span>
+                  <span>Attempt {cognitiveAttempts + 1} of {maxCognitiveAttempts}</span>
                 </div>
               </div>
             )}
