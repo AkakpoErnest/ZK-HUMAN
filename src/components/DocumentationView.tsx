@@ -44,8 +44,7 @@ function LoginForm() {
     </div>
   );
 }`,
-    vanilla: `<script src="https://cdn.zkhuman.com/v1/zkhuman.js"></script>
-    vanilla: \`<script src="https://cdn.zkhuman.dev/v1/zkhuman.js"></script>
+    vanilla: `<script src="https://cdn.zkhuman.dev/v1/zkhuman.js"></script>
 
 <div id="zk-human-verify"></div>
 <button id="submit-btn" disabled>Submit</button>
@@ -62,7 +61,7 @@ function LoginForm() {
       }
     }
   });
-</script>\``,
+</script>`,
     api: `// Server-side verification
 const response = await fetch('https://api.zkhuman.dev/v1/verify', {
   method: 'POST',
@@ -139,7 +138,7 @@ if (result.valid && result.humanScore > 70) {
                     <Book className="w-4 h-4" />
                     ZK-SNARK Theory
                   </a>
-                  <a href="https://github.com/YOUR_USERNAME/zk-human/releases" className="flex items-center gap-2 text-sm text-gray-400 hover:text-purple-400 transition-colors">
+                  <a href="https://github.com/yourusername/zk-human/releases" className="flex items-center gap-2 text-sm text-gray-400 hover:text-purple-400 transition-colors">
                     <Download className="w-4 h-4" />
                     SDK Downloads
                   </a>
@@ -164,9 +163,9 @@ if (result.valid && result.humanScore > 70) {
                       <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm">1</div>
                       <div>
                         <h3 className="text-lg font-semibold text-white mb-2">Get API Key</h3>
-                        <p className="text-gray-400 mb-3">Sign up for a free account and get your API key from the dashboard.</p>
+                        <p className="text-gray-400 mb-3">Register at zkhuman.dev and get your API key from the developer dashboard.</p>
                         <div className="bg-gray-900/50 border border-gray-600/30 rounded-lg p-3">
-                          <code className="text-sm text-cyan-300">API_KEY=zk_live_1234567890abcdef</code>
+                          <code className="text-sm text-cyan-300">ZKHUMAN_API_KEY=zkh_live_1234567890abcdef</code>
                         </div>
                       </div>
                     </div>
@@ -175,13 +174,13 @@ if (result.valid && result.humanScore > 70) {
                       <div className="w-8 h-8 bg-cyan-600 rounded-full flex items-center justify-center text-white font-bold text-sm">2</div>
                       <div>
                         <h3 className="text-lg font-semibold text-white mb-2">Install SDK</h3>
-                        <p className="text-gray-400 mb-3">Choose your preferred integration method.</p>
+                        <p className="text-gray-400 mb-3">Install the zkHuman SDK for your framework.</p>
                         <div className="space-y-2">
                           <div className="bg-gray-900/50 border border-gray-600/30 rounded-lg p-3">
-                            <code className="text-sm text-cyan-300">npm install @zkhuman/react</code>
+                            <code className="text-sm text-cyan-300">npm install @zkhuman/react @zkhuman/core</code>
                           </div>
                           <div className="bg-gray-900/50 border border-gray-600/30 rounded-lg p-3">
-                            <code className="text-sm text-cyan-300">yarn add @zkhuman/react</code>
+                            <code className="text-sm text-cyan-300">yarn add @zkhuman/react @zkhuman/core</code>
                           </div>
                         </div>
                       </div>
@@ -191,7 +190,7 @@ if (result.valid && result.humanScore > 70) {
                       <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center text-white font-bold text-sm">3</div>
                       <div>
                         <h3 className="text-lg font-semibold text-white mb-2">Integrate Component</h3>
-                        <p className="text-gray-400 mb-3">Add the verification component to your forms.</p>
+                        <p className="text-gray-400 mb-3">Add zkHuman verification to protect your forms and APIs.</p>
                         <div className="bg-gray-900/50 border border-gray-600/30 rounded-lg p-3">
                           <code className="text-sm text-cyan-300">&lt;ZKHumanVerify apiKey="your-key" /&gt;</code>
                         </div>
@@ -202,9 +201,9 @@ if (result.valid && result.humanScore > 70) {
                       <div className="w-8 h-8 bg-yellow-600 rounded-full flex items-center justify-center text-white font-bold text-sm">4</div>
                       <div>
                         <h3 className="text-lg font-semibold text-white mb-2">Verify Server-side</h3>
-                        <p className="text-gray-400 mb-3">Always validate proofs on your backend for security.</p>
+                        <p className="text-gray-400 mb-3">Validate ZK proofs server-side for maximum security.</p>
                         <div className="bg-gray-900/50 border border-gray-600/30 rounded-lg p-3">
-                          <code className="text-sm text-cyan-300">POST /api/verify with proof hash</code>
+                          <code className="text-sm text-cyan-300">POST https://api.zkhuman.dev/v1/verify</code>
                         </div>
                       </div>
                     </div>
