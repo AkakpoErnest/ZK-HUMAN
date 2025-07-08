@@ -74,7 +74,11 @@ const CognitiveChallenge: React.FC<CognitiveChallengeProps> = ({ onComplete, onI
   const handleAnswer = (answerIndex: number) => {
     onInteraction();
     const success = answerIndex === challenge.correct;
-    onComplete(success, { challenge, userAnswer: answerIndex, success });
+    
+    // Call onComplete immediately
+    setTimeout(() => {
+      onComplete(success, { challenge, userAnswer: answerIndex, success });
+    }, 500);
   };
 
   if (!challenge) return null;

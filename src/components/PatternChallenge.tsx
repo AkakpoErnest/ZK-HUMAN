@@ -52,14 +52,14 @@ const PatternChallenge: React.FC<PatternChallengeProps> = ({ onComplete, onInter
                    userPattern.every((num, idx) => num === pattern[idx]);
     
     setGamePhase('complete');
-    setTimeout(() => {
-      onComplete(success, { 
-        pattern, 
-        userPattern, 
-        success,
-        accuracy: success ? 100 : (userPattern.filter((num, idx) => num === pattern[idx]).length / pattern.length) * 100
-      });
-    }, 1000);
+    
+    // Call onComplete immediately to prevent blank screen
+    onComplete(success, { 
+      pattern, 
+      userPattern, 
+      success,
+      accuracy: success ? 100 : (userPattern.filter((num, idx) => num === pattern[idx]).length / pattern.length) * 100
+    });
   };
 
   const handleClear = () => {

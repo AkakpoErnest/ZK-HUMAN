@@ -64,18 +64,16 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
       setPatternAttempts(currentAttempts);
       
       if (success || currentAttempts >= maxPatternAttempts) {
-        // Move to next challenge
-        const newResults = [...challengeResults, result];
-        setChallengeResults(newResults);
+        // Add result and move to next challenge
+        setChallengeResults(prev => [...prev, result]);
         setProgress(66);
         setTimeout(() => {
           setCurrentChallenge('cognitive');
           setChallengeKey(prev => prev + 1);
         }, 1000);
       } else {
-        // Add failed attempt and retry
-        const newResults = [...challengeResults, result];
-        setChallengeResults(newResults);
+        // Add failed attempt result
+        setChallengeResults(prev => [...prev, result]);
         // Reset challenge for retry
         setTimeout(() => {
           setChallengeKey(prev => prev + 1);
@@ -87,20 +85,18 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
       
       if (success || currentAttempts >= maxCognitiveAttempts) {
         // Generate proof with all results
-        const finalResults = [...challengeResults, result];
-        setChallengeResults(finalResults);
+        setChallengeResults(prev => [...prev, result]);
         setProgress(100);
         setCurrentChallenge('processing');
         
         // Generate real ZK proof
         setTimeout(async () => {
-          const proof = await generateZKProof(finalResults);
+          const proof = await generateZKProof([...challengeResults, result]);
           onComplete(proof);
         }, 4000);
       } else {
-        // Add failed attempt and retry
-        const newResults = [...challengeResults, result];
-        setChallengeResults(newResults);
+        // Add failed attempt result
+        setChallengeResults(prev => [...prev, result]);
         // Reset challenge for retry
         setTimeout(() => {
           setChallengeKey(prev => prev + 1);
@@ -153,7 +149,7 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
               <div className="mt-4 text-center">
                 <div className="flex items-center justify-center gap-2 text-yellow-400 text-sm">
                   <RotateCcw className="w-4 h-4" />
-                  <span>Attempt {patternAttempts + 1} of {maxPatternAttempts}</span>
+                  <span>Attempt {patternAttempts} of {maxPatternAttempts}</span>
                 </div>
               </div>
             )}
@@ -171,7 +167,7 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
               <div className="mt-4 text-center">
                 <div className="flex items-center justify-center gap-2 text-yellow-400 text-sm">
                   <RotateCcw className="w-4 h-4" />
-                  <span>Attempt {cognitiveAttempts + 1} of {maxCognitiveAttempts}</span>
+                  <span>Attempt {cognitiveAttempts} of {maxCognitiveAttempts}</span>
                 </div>
               </div>
             )}
