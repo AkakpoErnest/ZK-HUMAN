@@ -64,16 +64,18 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
       setPatternAttempts(currentAttempts);
       
       if (success || currentAttempts >= maxPatternAttempts) {
-        // Add result and move to next challenge
-        setChallengeResults(prev => [...prev, result]);
+        // Move to next challenge
+        const newResults = [...challengeResults, result];
+        setChallengeResults(newResults);
         setProgress(66);
         setTimeout(() => {
           setCurrentChallenge('cognitive');
           setChallengeKey(prev => prev + 1);
         }, 1000);
       } else {
-        // Add failed attempt result
-        setChallengeResults(prev => [...prev, result]);
+        // Add failed attempt and retry
+        const newResults = [...challengeResults, result];
+        setChallengeResults(newResults);
         // Reset challenge for retry
         setTimeout(() => {
           setChallengeKey(prev => prev + 1);
@@ -84,9 +86,9 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
       setCognitiveAttempts(currentAttempts);
       
       if (success || currentAttempts >= maxCognitiveAttempts) {
-        // Add result and generate proof
-        setChallengeResults(prev => [...prev, result]);
+        // Generate proof with all results
         const finalResults = [...challengeResults, result];
+        setChallengeResults(finalResults);
         setProgress(100);
         setCurrentChallenge('processing');
         
@@ -96,8 +98,9 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
           onComplete(proof);
         }, 4000);
       } else {
-        // Add failed attempt result
-        setChallengeResults(prev => [...prev, result]);
+        // Add failed attempt and retry
+        const newResults = [...challengeResults, result];
+        setChallengeResults(newResults);
         // Reset challenge for retry
         setTimeout(() => {
           setChallengeKey(prev => prev + 1);

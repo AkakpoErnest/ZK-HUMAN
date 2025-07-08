@@ -386,7 +386,7 @@ function App() {
           {/* Quick Links */}
           <div className="mt-16 flex flex-wrap justify-center gap-8">
             <a
-              href="https://github.com/YOUR_USERNAME/zk-human"
+              href="https://github.com/yourusername/zk-human"
               className="cyber-button px-4 py-2 rounded-lg flex items-center gap-2 text-gray-300 hover:text-purple-400 transition-colors font-mono text-sm group"
             >
               <Github className="w-4 h-4 group-hover:rotate-12 transition-transform duration-300" />
