@@ -20,9 +20,18 @@ function App() {
   const [currentView, setCurrentView] = useState<
     "landing" | "verification" | "result" | "docs"
   >("landing");
+  const [showRocketLaunch, setShowRocketLaunch] = useState(true);
   const [proof, setProof] = useState<ZKPProof | null>(null);
   const [behavioralAnalyzer] = useState(() => new BehavioralAnalyzer());
   const [showPrivacyDetails, setShowPrivacyDetails] = useState(false);
+
+  // Hide rocket animation after 4 seconds
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowRocketLaunch(false);
+    }, 4000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleMouseMove = (e: React.MouseEvent) => {
     behavioralAnalyzer.trackMouseMove(e.clientX, e.clientY);
@@ -414,6 +423,69 @@ function App() {
 
   return (
     <div onMouseMove={handleMouseMove}>
+      {/* Rocket Launch Animation */}
+      {showRocketLaunch && (
+        <div className="fixed inset-0 z-50 bg-black flex items-center justify-center overflow-hidden">
+          {/* Stars background */}
+          <div className="absolute inset-0">
+            {Array.from({ length: 100 }).map((_, i) => (
+              <div
+                key={i}
+                className="absolute w-1 h-1 bg-white rounded-full animate-pulse"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                  animationDelay: `${Math.random() * 3}s`,
+                  animationDuration: `${2 + Math.random() * 2}s`,
+                }}
+              />
+            ))}
+          </div>
+
+          {/* Rocket */}
+          <div className="rocket-container relative">
+            <div className="rocket">
+              {/* Rocket body */}
+              <div className="rocket-body">
+                <div className="rocket-tip"></div>
+                <div className="rocket-main">
+                  <div className="rocket-window"></div>
+                  <div className="rocket-text">zkHuman</div>
+                </div>
+                <div className="rocket-fins">
+                  <div className="fin fin-left"></div>
+                  <div className="fin fin-right"></div>
+                </div>
+              </div>
+              
+              {/* Rocket flames */}
+              <div className="rocket-flames">
+                <div className="flame flame-1"></div>
+                <div className="flame flame-2"></div>
+                <div className="flame flame-3"></div>
+              </div>
+            </div>
+
+            {/* Launch text */}
+            <div className="launch-text">
+              <h1 className="text-4xl font-bold text-white mb-2 animate-pulse">
+                Launching zkHuman
+              </h1>
+              <p className="text-cyan-400 font-mono">
+                Initializing Zero-Knowledge Protocol...
+              </p>
+            </div>
+          </div>
+
+          {/* Countdown */}
+          <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2">
+            <div className="countdown text-6xl font-bold text-green-400 font-mono">
+              {Math.max(0, 4 - Math.floor((Date.now() % 4000) / 1000))}
+            </div>
+          </div>
+        </div>
+      )}
+
       {currentView === "landing" && renderLanding()}
       {currentView === "verification" && (
         <div className="min-h-screen bg-black relative overflow-hidden flex items-center justify-center p-4">
