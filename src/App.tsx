@@ -477,12 +477,6 @@ function App() {
             </div>
           </div>
 
-          {/* Countdown */}
-          <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2">
-            <div className="countdown text-6xl font-bold text-green-400 font-mono">
-              {Math.max(0, 4 - Math.floor((Date.now() % 4000) / 1000))}
-            </div>
-          </div>
         </div>
       )}
 
