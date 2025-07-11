@@ -19,7 +19,7 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
 }) => {
   const [currentChallenge, setCurrentChallenge] = useState<'pattern' | 'cognitive' | 'processing'>('pattern');
   const [challengeResults, setChallengeResults] = useState<any[]>([]);
-  const [progress, setProgress] = useState(0);
+  const [progress, setProgress] = useState(33);
   const [processingStep, setProcessingStep] = useState(0);
   const [patternAttempts, setPatternAttempts] = useState(0);
   const [cognitiveAttempts, setCognitiveAttempts] = useState(0);
@@ -27,10 +27,6 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
   const [maxPatternAttempts] = useState(3);
   const [maxCognitiveAttempts] = useState(2);
   const [behavioralAnalyzer] = useState(() => new BehavioralAnalyzer());
-
-  useEffect(() => {
-    setProgress(33);
-  }, []);
 
   useEffect(() => {
     if (currentChallenge === 'processing') {
@@ -55,50 +51,68 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
   }, [currentChallenge]);
 
   const handleChallengeComplete = async (success: boolean, response: any) => {
-    const result = { type: currentChallenge, success, response, timestamp: Date.now() };
+    console.log('Challenge completed:', { currentChallenge, success, response });
     
+    const result = { type: currentChallenge, success, response, timestamp: Date.now() };
     onInteraction();
 
     if (currentChallenge === 'pattern') {
-      const currentAttempts = patternAttempts + 1;
-      setPatternAttempts(currentAttempts);
+      const newAttempts = patternAttempts + 1;
+      setPatternAttempts(newAttempts);
       
-      if (success || currentAttempts >= maxPatternAttempts) {
-        // Add result and move to next challenge
-        setChallengeResults(prev => [...prev, result]);
+      console.log('Pattern challenge:', { success, newAttempts, maxPatternAttempts });
+      
+      if (success || newAttempts >= maxPatternAttempts) {
+        // Pattern completed successfully or max attempts reached
+        setChallengeResults(prev => {
+          const newResults = [...prev, result];
+          console.log('Moving to cognitive, results:', newResults);
+          return newResults;
+        });
+        
         setProgress(66);
+        
+        // Move to cognitive challenge
         setTimeout(() => {
+          console.log('Switching to cognitive challenge');
           setCurrentChallenge('cognitive');
           setChallengeKey(prev => prev + 1);
         }, 1000);
       } else {
-        // Add failed attempt result
+        // Failed attempt, retry
         setChallengeResults(prev => [...prev, result]);
-        // Reset challenge for retry
         setTimeout(() => {
+          console.log('Retrying pattern challenge');
           setChallengeKey(prev => prev + 1);
         }, 1500);
       }
     } else if (currentChallenge === 'cognitive') {
-      const currentAttempts = cognitiveAttempts + 1;
-      setCognitiveAttempts(currentAttempts);
+      const newAttempts = cognitiveAttempts + 1;
+      setCognitiveAttempts(newAttempts);
       
-      if (success || currentAttempts >= maxCognitiveAttempts) {
-        // Generate proof with all results
-        setChallengeResults(prev => [...prev, result]);
+      console.log('Cognitive challenge:', { success, newAttempts, maxCognitiveAttempts });
+      
+      if (success || newAttempts >= maxCognitiveAttempts) {
+        // Cognitive completed successfully or max attempts reached
+        const finalResults = [...challengeResults, result];
+        setChallengeResults(finalResults);
         setProgress(100);
         setCurrentChallenge('processing');
         
-        // Generate real ZK proof
+        console.log('Moving to processing, final results:', finalResults);
+        
+        // Generate ZK proof
         setTimeout(async () => {
-          const proof = await generateZKProof([...challengeResults, result]);
+          console.log('Generating ZK proof...');
+          const proof = await generateZKProof(finalResults);
+          console.log('ZK proof generated:', proof);
           onComplete(proof);
         }, 4000);
       } else {
-        // Add failed attempt result
+        // Failed attempt, retry
         setChallengeResults(prev => [...prev, result]);
-        // Reset challenge for retry
         setTimeout(() => {
+          console.log('Retrying cognitive challenge');
           setChallengeKey(prev => prev + 1);
         }, 1500);
       }
@@ -106,6 +120,8 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
   };
 
   const generateZKProof = async (results: any[]): Promise<ZKPProof> => {
+    console.log('Generating ZK proof with results:', results);
+    
     // Prepare behavioral witness data
     const behavioralData = behavioralAnalyzer.getBehavioralData();
     const witness: BehavioralWitness = {
@@ -128,7 +144,7 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
       id: zkProof.id,
       hash: zkProof.proof,
       timestamp: zkProof.timestamp,
-      verified: finalScore >= 60, // Lower threshold for better UX
+      verified: finalScore >= 60,
       humanScore: finalScore,
       zkCommitments: zkProof.commitments,
       challenge: zkProof.challenge
@@ -136,6 +152,8 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
   };
 
   const renderChallenge = () => {
+    console.log('Rendering challenge:', currentChallenge);
+    
     switch (currentChallenge) {
       case 'pattern':
         return (
@@ -145,7 +163,7 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
               onComplete={handleChallengeComplete}
               onInteraction={onInteraction}
             />
-            {patternAttempts > 0 && patternAttempts < maxAttempts && (
+            {patternAttempts > 0 && patternAttempts < maxPatternAttempts && (
               <div className="mt-4 text-center">
                 <div className="flex items-center justify-center gap-2 text-yellow-400 text-sm">
                   <RotateCcw className="w-4 h-4" />
@@ -163,7 +181,7 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
               onComplete={handleChallengeComplete}
               onInteraction={onInteraction}
             />
-            {cognitiveAttempts > 0 && cognitiveAttempts < maxAttempts && (
+            {cognitiveAttempts > 0 && cognitiveAttempts < maxCognitiveAttempts && (
               <div className="mt-4 text-center">
                 <div className="flex items-center justify-center gap-2 text-yellow-400 text-sm">
                   <RotateCcw className="w-4 h-4" />
@@ -220,7 +238,18 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
           </div>
         );
       default:
-        return null;
+        console.log('Unknown challenge type:', currentChallenge);
+        return (
+          <div className="text-center py-12">
+            <div className="text-red-400">Error: Unknown challenge type</div>
+            <button 
+              onClick={() => setCurrentChallenge('pattern')}
+              className="mt-4 px-4 py-2 bg-purple-600 text-white rounded-lg"
+            >
+              Restart
+            </button>
+          </div>
+        );
     }
   };
 
@@ -306,6 +335,11 @@ const VerificationProcess: React.FC<VerificationProcessProps> = ({
           </div>
           <span className="font-medium">ZK Proof</span>
         </div>
+      </div>
+
+      {/* Debug info */}
+      <div className="mb-4 text-xs text-gray-500 text-center">
+        Current: {currentChallenge} | Pattern: {patternAttempts}/{maxPatternAttempts} | Cognitive: {cognitiveAttempts}/{maxCognitiveAttempts}
       </div>
 
       {renderChallenge()}
