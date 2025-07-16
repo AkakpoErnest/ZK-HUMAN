@@ -127,7 +127,7 @@ function App() {
             </div>
 
             <div className="relative mb-8">
-              <h1 className="text-8xl md:text-9xl font-bold font-mono tracking-wider mb-4 relative">
+              <h1 className="text-6xl md:text-7xl font-bold font-mono tracking-wider mb-4 relative">
                 <span className="gradient-text glitch" data-text="zkHuman">
                   zkHuman
                 </span>
